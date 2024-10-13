@@ -13,12 +13,11 @@ export function Index() {
     useEffect(() => {
         refreshConference().then(null);
     }, []);
-
+    const globalStore = useGlobalStore();
     if (!conference)
         return <Box display="flex" justifyContent="center" py={5}>
             <CircularProgress/>
         </Box>
-    const globalStore = useGlobalStore();
     const confStart = new DateTime(conference.start_date).setLocale('ru').toFormat('d MMMM');
     return (<>
         <Container>
