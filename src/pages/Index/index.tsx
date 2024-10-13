@@ -1,29 +1,36 @@
-import {Box, Button, Container, Stack, Typography, useTheme} from "@mui/material";
+import {Box, Button, CircularProgress, Container, Stack, Typography, useTheme} from "@mui/material";
 import {useConferenceStore} from "../../stores/conference.store.ts";
-import {useEffect} from "react";
+import {useEffect, use} from "react";
 import {useGlobalStore} from "../../stores/global.store.ts";
 import {DateTime} from "luxon";
 
+
+
+
 export function Index() {
-    const conferenceStore = useConferenceStore();
+    const conference = useConferenceStore(state => state.conference);
+    const refreshConference = useConferenceStore(state => state.refresh);
     useEffect(() => {
-        conferenceStore.refresh();
-    }, [conferenceStore])
+        refreshConference().then(null);
+    }, []);
+
+    if (!conference)
+        return <Box display="flex" justifyContent="center" py={5}>
+            <CircularProgress/>
+        </Box>
     const globalStore = useGlobalStore();
-    const confStart = new DateTime(conferenceStore.conference!.start_date).setLocale('ru').toFormat('d MMMM');
-    const theme = useTheme();
-    console.log(theme.palette.primary.main)
+    const confStart = new DateTime(conference.start_date).setLocale('ru').toFormat('d MMMM');
     return (<>
         <Container>
             <Stack direction="column" gap={2}>
                 <Typography variant="h6" color="primary">
-                    {conferenceStore.conference?.grade}
+                    {conference.grade}
                 </Typography>
                 <Typography variant="h3">
-                    {conferenceStore.conference?.short_name}
+                    {conference.short_name}
                 </Typography>
                 <Typography variant="body1" color="text.hint">
-                    {conferenceStore.conference?.name}
+                    {conference.name}
                 </Typography>
                 <Button
                     variant="contained"
@@ -65,7 +72,7 @@ export function Index() {
                                 Продолжительность
                             </Typography>
                             <Typography variant="body2">
-                                {conferenceStore.conference!.duration}
+                                {conference.duration}
                             </Typography>
                         </Box>
                         <Box sx={{
@@ -77,7 +84,7 @@ export function Index() {
                                 Формат конференции
                             </Typography>
                             <Typography variant="body2">
-                                {conferenceStore.conference!.format}
+                                {conference.format}
                             </Typography>
                         </Box>
 
