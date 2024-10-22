@@ -5,7 +5,7 @@ import svgr from 'vite-plugin-svgr'
 export default defineConfig({
     server: {
         proxy: {
-            '/api': 'http://localhost:8000'
+            '/api': 'https://conference.techgiants.ru'
         }
     },
     plugins: [

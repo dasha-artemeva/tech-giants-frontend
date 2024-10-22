@@ -8,6 +8,7 @@ import '@fontsource/roboto/700.css';
 import {SnackbarProvider} from "notistack";
 import AppRouter from "./router.tsx";
 
+
 createRoot(document.getElementById('root')!).render(
     <ThemeProvider theme={theme}>
         <CssBaseline/>
