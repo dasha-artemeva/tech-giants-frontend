@@ -3,13 +3,17 @@ import {useUserStore} from "../../stores/user.store.ts";
 import {Outlet, useNavigate} from "react-router-dom";
 import Profile from "../Profile";
 import {usePermissions} from "../../utils/usePermissions.ts";
+import React, { useEffect } from 'react';
 
 export function Dashboard() {
     const {user} = useUserStore();
     const navigate = useNavigate();
-    if (!user){
-        return navigate('/')
-    }
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/'); // Редирект на главную страницу
+        }
+    }, [user, navigate]);
     const permissions = usePermissions();
     const buttons = [
         {

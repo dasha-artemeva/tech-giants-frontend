@@ -1,12 +1,13 @@
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import AppLayout from "./AppLayout.tsx";
-import Index from "./pages/Index";
+import Index from "./pages/Index/index.tsx";
 import {Dashboard} from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import RequestsUserPage from "./pages/RequestsUserPage";
 import FilledProfilePage from "./pages/FilledProfilePage";
 import PermissionPage from "./pages/PermissionPage";
 import ModerationPage from "./pages/ModerationPage";
+import ArchivePage from "./pages/Archive";
 
 export function AppRouter() {
     return (<>
@@ -33,9 +34,15 @@ export function AppRouter() {
                         <Route index path="*" element={
                             <Navigate to="/dashboard/profile" replace />
                         }/>
+                                                                  
+                    </Route>
+                </Route>
+                    <Route element={<AppLayout/>} path="/">
+                        <Route path="archive" element={<ArchivePage />}>
                     </Route>
                 </Route>
             </Routes>
+        
         </BrowserRouter>
     </>);
 }

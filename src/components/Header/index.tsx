@@ -19,8 +19,10 @@ import AuthForm from "../AuthForm";
 import CenterModal from "../CenterModal";
 import {useUserStore} from "../../stores/user.store.ts";
 import {useGlobalStore} from "../../stores/global.store.ts";
-import {Navigate, useNavigate} from "react-router-dom";
+import {Navigate, useNavigate, useLocation} from "react-router-dom";
 import authService from "../../services/AuthService";
+
+
 
 
 interface ButtonConfig{
@@ -33,14 +35,17 @@ interface ButtonConfig{
 
 export function Header() {
     const [drawerOpened, setDrawerOpened] = useState(false);
-    const globalStore = useGlobalStore();
     const userStore = useUserStore();
     const navigate = useNavigate();
+    const globalStore = useGlobalStore();
+    const location = useLocation();
     useEffect(() => {
         userStore.refresh();
     }, [])
     const buttons: ButtonConfig[] = [
-        {text: 'Архив', show: true},
+        {text: 'Архив', 
+            show: location.pathname !== '/Archive', 
+            onClick: () => navigate('/Archive')},
         {
             text: 'Войти',
             buttonProps: {endIcon: <LoginIcon/>},

@@ -6,7 +6,7 @@ export function HeaderButton({children, ...props}: ButtonProps) {
             variant="outlined"
             size="small"
             sx={{
-                borderRadius: 3,
+                borderRadius: 5,
                 textTransform: "none",
             }}
             color="secondary"
