@@ -16,9 +16,18 @@ interface SwipeableImageProps {
 }
 
 const images = [
-    { src: "https://via.placeholder.com/200/FF0000/FFFFFF?text=Image+1", alt: "Изображение 1" },
-    { src: "https://via.placeholder.com/200/00FF00/FFFFFF?text=Image+2", alt: "Изображение 2" },
-    { src: "https://via.placeholder.com/200/0000FF/FFFFFF?text=Image+3", alt: "Изображение 3" },
+    { src: '../src/components/images/IMG_5580.jpg', alt: "Изображение 1" },
+    { src: '../src/components/images/IMG_5581.jpg', alt: "Изображение 2" },
+    { src: '../src/components/images/IMG_5582.jpg', alt: "Изображение 3" },
+    { src: '../src/components/images/IMG_5584.jpg', alt: "Изображение 4" },
+    { src: '../src/components/images/IMG_5585.jpg', alt: "Изображение 5" },
+    { src: '../src/components/images/IMG_5586.jpg', alt: "Изображение 6" },
+    { src: '../src/components/images/IMG_5587.jpg', alt: "Изображение 7" },
+    { src:  '../src/components/images/IMG_5590.jpg', alt: "Изображение 8" },
+    { src: '../src/components/images/IMG_5591.jpg', alt: "Изображение 9" },
+    { src: '../src/components/images/photo_5244767466784156973_y.jpg', alt: "Изображение 10" },
+    { src: '../src/components/images/photo_5244767466784156974_y.jpg', alt: "Изображение 11" },
+    { src: '../src/components/images/photo_5244767466784156975_y.jpg', alt: "Изображение 12" },
 ];
 
 const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
