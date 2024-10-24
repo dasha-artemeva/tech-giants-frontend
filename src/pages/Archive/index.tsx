@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from '../../components/Header';
-
-
-
+import {
+  Container,
+  Typography,
+  Select,
+  MenuItem,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Collapse,
+} from '@mui/material';
 
 interface ArchiveItem {
   year: number;
@@ -19,27 +26,30 @@ const YearFilter: React.FC<YearFilterProps> = ({ setFilterYear }) => {
   const years = [2003, 2004, 2005, 2006, 2007, 2008, 2010, 2012, 2013];
 
   return (
-    
-    <div className="mb-3">
-      <h2 style={{ color: '#03e9f4' }}>Фильтр по годам</h2>
-      <select 
-        className="form-select" 
-        onChange={(e) => setFilterYear(e.target.value ? parseInt(e.target.value) : null)}
+    <div style={{ marginBottom: '16px' }}>
+      <Typography variant="h5" style={{ color: '#03e9f4' }}>
+        Фильтр по годам
+      </Typography>
+      <Select
+        fullWidth
+        onChange={(e) => setFilterYear(e.target.value ? parseInt(e.target.value as string) : null)}
+        displayEmpty
+        defaultValue="" // Устанавливаем значение по умолчанию
       >
-        <option value="">Все годы</option>
+        <MenuItem value="">
+          <em>Все годы</em>
+        </MenuItem>
         {years.map(year => (
-          <option  key={year} value={year}> 
+          <MenuItem key={year} value={year}>
             {year}
-          </option>
+          </MenuItem>
         ))}
-      </select>
+      </Select>
     </div>
   );
 };
 
-
-
-const ArchivePage = () => {  
+const ArchivePage = () => {
   const [archiveData] = useState<ArchiveItem[]>([
     { year: 2013, text: 'в 2013 году были две конференции(Информационное сообщение XIII международной научно-практической конференции "Информационная безопасность 2013" и Программа XIII международной научно-практической конференции "Информационная безопасность 2013") по таким тема, как: Концептуальные вопросы информационной безопасности, Защита объектов информатизации, Безопасность информационных систем и сетей, Методы и средства криптографии и стеганографии, Информационная безопасность телекоммуникационных систем, Прикладные вопросы информационной безопасности.', imageUrl: '#' },
     { year: 2012, text: 'в 2012 году году прошла международная научно-практическая конференция Информационная безопасность 2012. На этой конференции были такие темы, как: Концептуальные вопросы информационной безопасности, Безопасность информационно-телекоммуникационных систем, Защита объектов информатизации, Методы и средства криптографии и стеганографии.', imageUrl: '#' },
@@ -63,37 +73,34 @@ const ArchivePage = () => {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [filterYear, setFilterYear] = useState<number | null>(null);
 
-  const uniqueYears = [...new Set(archiveData.map(item => item.year))].sort((a, b) => b - a);
-
+  // Логика фильтрации
   const filteredData = filterYear
     ? archiveData.filter(item => item.year === filterYear)
     : archiveData;
 
   return (
     <>
-      <Header /> {/* Добавляем Header здесь */}
-      <div  className="container mt-5">
-        <h1 style={{ color: '#03e9f4' }}>Архив</h1>
+      <Header />
+      <Container sx={{ mt: 5 }}>
+        <Typography variant="h4" style={{ color: '#03e9f4' }}>
+          Архив
+        </Typography>
         <YearFilter setFilterYear={setFilterYear} />
-        <ul className="list-group">
+        <List>
           {filteredData.map(item => (
-            <li  key={item.year} className="list-group-item d-flex justify-content-between align-items-center">
-              <button
-                
-                className="btn btn-link" 
-                onClick={() => setSelectedYear(item.year === selectedYear ? null : item.year)}
-              >
-                {item.year}
-              </button>
-              {selectedYear === item.year && (
-                <div className="mt-2">
-                  <p>{item.text}</p>
+            <ListItem key={item.year}>
+              <ListItemButton onClick={() => setSelectedYear(item.year === selectedYear ? null : item.year)}>
+                <ListItemText primary={item.year} />
+              </ListItemButton>
+              <Collapse in={selectedYear === item.year} timeout="auto" unmountOnExit>
+                <div style={{ marginTop: '16px', marginLeft: '16px' }}>
+                  <Typography>{item.text}</Typography>
                 </div>
-              )}
-            </li>
+              </Collapse>
+            </ListItem>
           ))}
-        </ul>
-      </div>
+        </List>
+      </Container>
     </>
   );
 };
