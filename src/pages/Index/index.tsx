@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Container, Stack, Typography } from "@mui/material";
+import {Box, Button, CircularProgress, Container, Grid2 as Grid, Stack, Typography} from "@mui/material";
 import { useConferenceStore } from "../../stores/conference.store.ts";
 import { useEffect, useState, useRef } from "react";
 import { useGlobalStore } from "../../stores/global.store.ts";
@@ -14,19 +14,34 @@ interface SwipeableImageProps {
     images: Image[]; // Массив изображений
 }
 
+// TODO: Уродливый костыль надо пофиксить
+
+import image1 from '../../components/images/IMG_5581.jpg';
+import image2 from '../../components/images/IMG_5581.jpg';
+import image3 from '../../components/images/IMG_5582.jpg';
+import image4 from '../../components/images/IMG_5584.jpg';
+import image5 from '../../components/images/IMG_5585.jpg';
+import image6 from '../../components/images/IMG_5586.jpg';
+import image7 from '../../components/images/IMG_5587.jpg';
+import image8 from '../../components/images/IMG_5590.jpg';
+import image9 from '../../components/images/IMG_5591.jpg';
+import image10 from '../../components/images/photo_5244767466784156973_y.jpg';
+import image11 from '../../components/images/photo_5244767466784156974_y.jpg';
+import image12 from '../../components/images/photo_5244767466784156975_y.jpg';
+
 const images = [
-    { src: '../src/components/images/IMG_5580.jpg', alt: "Изображение 1" },
-    { src: '../src/components/images/IMG_5581.jpg', alt: "Изображение 2" },
-    { src: '../src/components/images/IMG_5582.jpg', alt: "Изображение 3" },
-    { src: '../src/components/images/IMG_5584.jpg', alt: "Изображение 4" },
-    { src: '../src/components/images/IMG_5585.jpg', alt: "Изображение 5" },
-    { src: '../src/components/images/IMG_5586.jpg', alt: "Изображение 6" },
-    { src: '../src/components/images/IMG_5587.jpg', alt: "Изображение 7" },
-    { src: '../src/components/images/IMG_5590.jpg', alt: "Изображение 8" },
-    { src: '../src/components/images/IMG_5591.jpg', alt: "Изображение 9" },
-    { src: '../src/components/images/photo_5244767466784156973_y.jpg', alt: "Изображение 10" },
-    { src: '../src/components/images/photo_5244767466784156974_y.jpg', alt: "Изображение 11" },
-    { src: '../src/components/images/photo_5244767466784156975_y.jpg', alt: "Изображение 12" },
+    { src: image1, alt: "Изображение 1" },
+    { src: image2, alt: "Изображение 2" },
+    { src: image3, alt: "Изображение 3" },
+    { src: image4, alt: "Изображение 4" },
+    { src: image5, alt: "Изображение 5" },
+    { src: image6, alt: "Изображение 6" },
+    { src: image7, alt: "Изображение 7" },
+    { src: image8, alt: "Изображение 8" },
+    { src: image9, alt: "Изображение 9" },
+    { src: image10, alt: "Изображение 10" },
+    { src: image11, alt: "Изображение 11" },
+    { src: image12, alt: "Изображение 12" },
 ];
 
 const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
@@ -66,9 +81,6 @@ const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
             sx={{
-                width: { xs: '100%', sm: '400px' },
-                height: { xs: '200px', sm: '400px' },
-                marginLeft: "100px",
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -157,7 +169,7 @@ export function Index() {
                 >
                     Подать заявку
                 </Button>
-                <Box width="80%">
+                <Box width={{xs: "100%", md: "80%"}}>
                     <Box
                         display="flex"
                         justifyContent="space-between"
@@ -202,21 +214,20 @@ export function Index() {
                         </Box>
 
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, alignItems: 'center',}}>
-    <Box sx={{ flex: 1, }}>
-        <Typography variant="body1" sx={{ mt: 2, fontSize: { xs: '0.8rem', sm: '1rem' } }}>
-        На кафедре БИТ ИКТИБ проводятся конференции по информационной безопасности.
-        Научно практическая конференция "Информационная безопасность" проводилась с 2003 по 2016 годы. В 2024 году планируется возобновить проведение конференции, присвоив ей имя основателя профессора О.Б. Макаревича
-        </Typography>
-        
-    </Box>
-
-    <Box sx={{ flex: 1, maxWidth: { xs: '100%', sm: '400px' }, display: 'flex', justifyContent: 'center', marginLeft: "-100px" }}>
-        {/* Фотогалерея */}
-        <SwipeableImage images={images} />
-    </Box>
-
-                    </Box>
+                    <Grid container py={8}>
+                        <Grid size={{xs: 12, md: 7}}>
+                            <Typography variant="body1">
+                            На кафедре БИТ ИКТИБ проводятся конференции по информационной безопасности.
+                            Научно практическая конференция "Информационная безопасность" проводилась с 2003 по 2016 годы.
+                            В 2024 году планируется возобновить проведение конференции, присвоив ей
+                            имя основателя профессора О.Б. Макаревича
+                            </Typography>
+                        </Grid>
+                        <Grid size={{xs: 0, md: 1}}/>
+                        <Grid size={{xs: 12, md: 4}}>
+                            <SwipeableImage images={images} />
+                        </Grid>
+                    </Grid>
                 </Box>
             </Stack>
         </Container>
