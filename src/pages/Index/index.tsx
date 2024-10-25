@@ -1,9 +1,8 @@
-import { Box, Button, CircularProgress, Container, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Stack, Typography } from "@mui/material";
 import { useConferenceStore } from "../../stores/conference.store.ts";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useGlobalStore } from "../../stores/global.store.ts";
 import { DateTime } from 'luxon';
-import { useSwipeable } from 'react-swipeable';
 
 interface Image {
     src: string;
@@ -23,7 +22,7 @@ const images = [
     { src: '../src/components/images/IMG_5585.jpg', alt: "Изображение 5" },
     { src: '../src/components/images/IMG_5586.jpg', alt: "Изображение 6" },
     { src: '../src/components/images/IMG_5587.jpg', alt: "Изображение 7" },
-    { src:  '../src/components/images/IMG_5590.jpg', alt: "Изображение 8" },
+    { src: '../src/components/images/IMG_5590.jpg', alt: "Изображение 8" },
     { src: '../src/components/images/IMG_5591.jpg', alt: "Изображение 9" },
     { src: '../src/components/images/photo_5244767466784156973_y.jpg', alt: "Изображение 10" },
     { src: '../src/components/images/photo_5244767466784156974_y.jpg', alt: "Изображение 11" },
@@ -32,12 +31,8 @@ const images = [
 
 const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-
-    const handlers = useSwipeable({
-        onSwipedLeft: () => nextImage(),
-        onSwipedRight: () => prevImage(),
-        trackMouse: true,
-    });
+    const touchStartX = useRef(0);
+    const touchEndX = useRef(0);
 
     const nextImage = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -47,9 +42,29 @@ const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
     };
 
+    const onTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX; // Запоминаем начальную позицию касания
+    };
+
+    const onTouchMove = (e: React.TouchEvent) => {
+        touchEndX.current = e.touches[0].clientX; // Обновляем конечную позицию касания
+    };
+
+    const onTouchEnd = () => {
+        const diffX = touchStartX.current - touchEndX.current; // Разница между начальной и конечной позициями
+
+        if (diffX > 50) {
+            nextImage(); // Свайп влево
+        } else if (diffX < -50) {
+            prevImage(); // Свайп вправо
+        }
+    };
+
     return (
         <Box
-            {...handlers}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
             sx={{
                 width: { xs: '100%', sm: '400px' },
                 height: { xs: '200px', sm: '400px' },
@@ -69,7 +84,7 @@ const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
                     style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '8px' }}
                 />
             ) : (
-                <Typography variant="body1">Нет изображений для отображения</Typography>
+                <p>Нет изображений для отображения</p>
             )}
             <Button
                 onClick={prevImage}
@@ -77,9 +92,10 @@ const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
                     position: 'absolute',
                     left: '10px',
                     top: '50%',
-                    transform: 'translateY(-50%)',
+                    transform: 'translateY(-50%)', // Центрируем по вертикали
                     zIndex: 1,
-                    display: { xs: 'none', sm: 'block' }
+                    margin: '0 -73px',
+                    display: { xs: 'none', sm: 'block'  }
                 }}
             >
                 Назад
@@ -90,8 +106,9 @@ const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
                     position: 'absolute',
                     right: '10px',
                     top: '50%',
-                    transform: 'translateY(-50%)',
+                    transform: 'translateY(-50%)', // Центрируем по вертикали
                     zIndex: 1,
+                    margin: '0 -80px',
                     display: { xs: 'none', sm: 'block' },
                 }}
             >
@@ -101,23 +118,20 @@ const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
     );
 };
 
+
+
 export function Index() {
     const conference = useConferenceStore(state => state.conference);
     const refreshConference = useConferenceStore(state => state.refresh);
-
     useEffect(() => {
         refreshConference().then(null);
     }, []);
-
     const globalStore = useGlobalStore();
     if (!conference)
-        return (
-            <Box display="flex" justifyContent="center" py={5}>
-                <CircularProgress />
-            </Box>
-        );
-
-    const confStart = DateTime.fromISO(conference.start_date).setLocale('ru').toFormat('d MMMM');
+        return <Box display="flex" justifyContent="center" py={5}>
+            <CircularProgress />
+        </Box>
+    const confStart = new DateTime(conference.start_date).setLocale('ru').toFormat('d MMMM');
 
     return (
         <Container>
@@ -128,26 +142,26 @@ export function Index() {
                 <Typography variant="h3">
                     {conference.short_name}
                 </Typography>
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant="body1" color="text.hint">
                     {conference.name}
                 </Typography>
                 <Button
                     variant="contained"
                     sx={{
-                        borderRadius: 3,
+ borderRadius: 3,
                         maxWidth: {
                             sm: '30%'
                         }
                     }}
-                    onClick={() => globalStore.setAuthModalOpened(true)}
+                    onClick={() => globalStore.setAuthModalOpened(true )}
                 >
                     Подать заявку
                 </Button>
                 <Box width="80%">
                     <Box
- display="flex"
+                        display="flex"
                         justifyContent="space-between"
-                        flexDirection={{ xs: 'column', sm: 'row' }}
+                        flexDirection={() => ({ xs: 'column', sm: 'row' })}
                         gap={2}
                     >
                         <Box sx={{
@@ -155,7 +169,7 @@ export function Index() {
                             borderColor: 'secondary.main',
                             pl: 1
                         }}>
-                            <Typography variant="body1" color="text.secondary">
+                            <Typography variant="body1" color="text.hint">
                                 Начало
                             </Typography>
                             <Typography variant="body2">
@@ -167,7 +181,7 @@ export function Index() {
                             borderColor: 'secondary.main',
                             pl: 1
                         }}>
-                            <Typography variant="body1" color="text.secondary">
+                            <Typography variant="body1" color="text.hint">
                                 Продолжительность
                             </Typography>
                             <Typography variant="body2">
@@ -179,26 +193,28 @@ export function Index() {
                             borderColor: 'secondary.main',
                             pl: 1
                         }}>
-                            <Typography variant="body1" color="text.secondary">
+                            <Typography variant="body1" color="text.hint">
                                 Формат конференции
                             </Typography>
                             <Typography variant="body2">
                                 {conference.format}
                             </Typography>
                         </Box>
-                    </Box>
-                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, alignItems: 'center', }}>
-                        <Box sx={{ flex: 1, }}>
-                            <Typography variant="body1" sx={{ mt: 2, fontSize: { xs: '0.8rem', sm: '1rem' } }}>
-                                На кафедре БИТ ИКТИБ проводятся конференции по информационной безопасности.
-        Научно практическая конференция "Информационная безопасность" проводилась с 2003 по 2016 годы. В 2024 году планируется возобновить проведение конференции, присвоив ей имя основателя профессора О.Б. Макаревича.
-                            </Typography>
-                        </Box>
 
-                        <Box sx={{ flex: 1, maxWidth: { xs: '100%', sm: '400px' }, display: 'flex', justifyContent: 'center', marginLeft: "-100px" }}>
-                            {/* Фотогалерея */}
-                            <SwipeableImage images={images} />
-                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, alignItems: 'center',}}>
+    <Box sx={{ flex: 1, }}>
+        <Typography variant="body1" sx={{ mt: 2, fontSize: { xs: '0.8rem', sm: '1rem' } }}>
+        На кафедре БИТ ИКТИБ проводятся конференции по информационной безопасности.
+        Научно практическая конференция "Информационная безопасность" проводилась с 2003 по 2016 годы. В 2024 году планируется возобновить проведение конференции, присвоив ей имя основателя профессора О.Б. Макаревича
+        </Typography>
+        
+    </Box>
+
+    <Box sx={{ flex: 1, maxWidth: { xs: '100%', sm: '400px' }, display: 'flex', justifyContent: 'center', marginLeft: "-100px" }}>
+        {/* Фотогалерея */}
+        <SwipeableImage images={images} />
+    </Box>
 
                     </Box>
                 </Box>
