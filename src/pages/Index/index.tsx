@@ -15,8 +15,8 @@ interface SwipeableImageProps {
 }
 
 const images = [
-    { src: '../src/components/images/IMG_5580.jpg', alt: "Изображение 1" },
-    { src: '../src/components/images/IMG_5581.jpg', alt: "Изображение 2" },
+    { src: '../src/components/images/IMG_5580.jpg', alt: "Изображение 1", },
+    { src: '../src/components/images/IMG_5581.jpg', alt: "Изображение 2",  },
     { src: '../src/components/images/IMG_5582.jpg', alt: "Изображение 3" },
     { src: '../src/components/images/IMG_5584.jpg', alt: "Изображение 4" },
     { src: '../src/components/images/IMG_5585.jpg', alt: "Изображение 5" },
@@ -25,8 +25,7 @@ const images = [
     { src: '../src/components/images/IMG_5590.jpg', alt: "Изображение 8" },
     { src: '../src/components/images/IMG_5591.jpg', alt: "Изображение 9" },
     { src: '../src/components/images/photo_5244767466784156973_y.jpg', alt: "Изображение 10" },
-    { src: '../src/components/images/photo_5244767466784156974_y.jpg', alt: "Изображение 11" },
-    { src: '../src/components/images/photo_5244767466784156975_y.jpg', alt: "Изображение 12" },
+    { src: '../src/components/images/photo_5244767466784156975_y.jpg', alt: "Изображение 11" },
 ];
 
 const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
@@ -66,8 +65,8 @@ const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
             sx={{
-                width: { xs: '100%', sm: '400px' },
-                height: { xs: '200px', sm: '400px' },
+                width: { xs: '100%', sm: '600px' },
+                height: { xs: '300px', sm: '600px' },
                 marginLeft: "100px",
                 display: 'flex',
                 justifyContent: 'center',
@@ -75,13 +74,14 @@ const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
                 position: 'relative',
                 cursor: 'pointer',
                 userSelect: 'none',
+                
             }}
         >
             {images.length > 0 ? (
                 <img
                     src={images[currentIndex].src}
                     alt={images[currentIndex].alt}
-                    style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '8px' }}
+                    style={{ maxWidth: '600px', maxHeight: '600px', borderRadius: '8px' }}
                 />
             ) : (
                 <p>Нет изображений для отображения</p>
@@ -94,11 +94,12 @@ const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
                     top: '50%',
                     transform: 'translateY(-50%)', // Центрируем по вертикали
                     zIndex: 1,
-                    margin: '0 -73px',
+                    margin: '0 -58px',
                     display: { xs: 'none', sm: 'block'  }
+                    
                 }}
             >
-                Назад
+                <img src="../src/components/images/left-arrow.jpg" alt="<" style={{ width: '30px', height: '30px'  }} />
             </Button>
             <Button
                 onClick={nextImage}
@@ -108,11 +109,11 @@ const SwipeableImage: React.FC<SwipeableImageProps> = ({ images }) => {
                     top: '50%',
                     transform: 'translateY(-50%)', // Центрируем по вертикали
                     zIndex: 1,
-                    margin: '0 -80px',
+                    margin: '0 -58px',
                     display: { xs: 'none', sm: 'block' },
                 }}
             >
-                Вперед
+                <img src="../src/components/images/right-arrow.jpg" alt=">" style={{ width: '30px', height: 'px' }} />
             </Button>
         </Box>
     );
@@ -204,14 +205,13 @@ export function Index() {
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, alignItems: 'center',}}>
     <Box sx={{ flex: 1, }}>
-        <Typography variant="body1" sx={{ mt: 2, fontSize: { xs: '0.8rem', sm: '1rem' } }}>
-        На кафедре БИТ ИКТИБ проводятся конференции по информационной безопасности.
-        Научно практическая конференция "Информационная безопасность" проводилась с 2003 по 2016 годы. В 2024 году планируется возобновить проведение конференции, присвоив ей имя основателя профессора О.Б. Макаревича
-        </Typography>
+        <Typography variant="body1" width={"500px"} sx={{ mt: 0, textAlign: 'justify', fontSize: { xs: '0.8rem', sm: '1.7rem' } }}>
+        &emsp;На кафедре БИТ ИКТИБ проводятся конференции по информационной безопасности. Научно-практическая конференция "Информационная безопасность" проводилась с 2003 по 2016 годы. <br></br> &emsp;2024 году планируется возобновить проведение&nbsp;конференции, присвоив ей имя основателя профессора О.Б. Макаревича.
         
+        </Typography>
     </Box>
 
-    <Box sx={{ flex: 1, maxWidth: { xs: '100%', sm: '400px' }, display: 'flex', justifyContent: 'center', marginLeft: "-100px" }}>
+    <Box sx={{ flex: 1, maxWidth: { xs: '100%', sm: '400px' }, display: 'flex', justifyContent: 'center', marginLeft: "100px" }}>
         {/* Фотогалерея */}
         <SwipeableImage images={images} />
     </Box>
