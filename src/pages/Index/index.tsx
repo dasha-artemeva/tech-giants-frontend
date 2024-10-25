@@ -215,7 +215,6 @@ export function Index() {
         {/* Фотогалерея */}
         <SwipeableImage images={images} />
     </Box>
-
                     </Box>
                 </Box>
             </Stack>
