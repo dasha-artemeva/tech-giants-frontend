@@ -47,8 +47,8 @@ export function ProfileForm() {
         >
             <TextField variant="standard" label="email" value={userStore.user?.email} disabled/>
             <TextField variant="standard" label="username" value={userStore.user?.username} disabled/>
-            <FormTextInput label="Имя" name="first_name" control={control}/>
             <FormTextInput label="Фамилия" name="last_name" control={control}/>
+            <FormTextInput label="Имя" name="first_name" control={control}/>
             <FormTextInput label="Отчество" name="middle_name" control={control}/>
             <FormTextInput label="Номер телефона" name="phone_number" control={control}/>
             <FormTextInput label="Дата рождения" name="birth_date" control={control} textFieldProps={{type: "date"}}/>
